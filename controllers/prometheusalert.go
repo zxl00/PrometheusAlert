@@ -371,8 +371,8 @@ func SetRecord(AlertValue interface{}) {
 			Labels:      Labels,
 			Summary:     Summary,
 			Description: Description,
-			StartsAt:    StartAt,
-			EndsAt:      EndAt,
+			StartsAt:    GetCSTtime(StartAt),
+			EndsAt:      GetCSTtime(EndAt),
 			Created:     dt,
 		}
 		elastic.Insert(esIndex, alert)
@@ -386,6 +386,7 @@ func TransformAlertMessage(p_json interface{}, tpltext string) (error error, msg
 		"GetCSTtime":      GetCSTtime,
 		"TimeFormat":      TimeFormat,
 		"GetTime":         GetTime,
+		"SumTime":         SumTime,
 		"toUpper":         strings.ToUpper,
 		"toLower":         strings.ToLower,
 		"title":           strings.Title,

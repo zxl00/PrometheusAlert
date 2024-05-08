@@ -81,6 +81,16 @@ func GetCSTtime(date string) string {
 	return tm
 }
 
+// 告警持续时间
+
+func SumTime(startTime string) interface{} {
+	tm := GetCSTtime(startTime)
+	t1, _ := time.Parse("2006-01-02 15:04:05", tm)
+	t2, _ := time.Parse("2006-01-02 15:04:05", time.Now().Format("2006-01-02 15:04:05"))
+	sub := t2.Sub(t1)
+	return sub
+}
+
 func TimeFormat(timestr, format string) string {
 	returnTime, err := time.Parse("2006-01-02T15:04:05.999999999Z", timestr)
 	if err != nil {
