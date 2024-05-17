@@ -106,9 +106,9 @@ func (c *PrometheusAlertController) PrometheusAlert() {
 		AliyunAlertJson.Timestamp = c.Input().Get("timestamp")
 		p_json = AliyunAlertJson
 	} else {
-		json.Unmarshal(c.Ctx.Input.RequestBody, &p_json)
+		_ = json.Unmarshal(c.Ctx.Input.RequestBody, &p_json)
 		//针对prometheus的消息特殊处理
-		json.Unmarshal(c.Ctx.Input.RequestBody, &p_alertmanager_json)
+		_ = json.Unmarshal(c.Ctx.Input.RequestBody, &p_alertmanager_json)
 	}
 
 	// alertgroup
@@ -160,6 +160,7 @@ func (c *PrometheusAlertController) PrometheusAlert() {
 	}
 
 	var message string
+	// pMsg.Type 告警类型 PrometheusAlertTpl 数据库中是否有该模板
 	if pMsg.Type != "" && PrometheusAlertTpl != nil {
 		//判断是否是来自 Prometheus的告警
 		if pMsg.Split != "false" && PrometheusAlertTpl.Tpluse == "Prometheus" {
@@ -197,6 +198,25 @@ func (c *PrometheusAlertController) PrometheusAlert() {
 
 				}
 
+			}
+		} else if pMsg.Split != "false" && PrometheusAlertTpl.Tpluse == "Skywalking" {
+			// 定义sky消息json
+			var sky_json []map[string]interface{}
+			err := json.Unmarshal(c.Ctx.Input.RequestBody, &sky_json)
+			if err != nil {
+				logs.Error(logsign, err.Error())
+				message = err.Error()
+			}
+			// 拆分skywalking告警消息
+			for _, Return_pMsg := range sky_json {
+				err, msg := TransformAlertMessage([]interface{}{Return_pMsg}, PrometheusAlertTpl.Tpl)
+				if err != nil {
+					logs.Error(logsign, err.Error())
+					message = err.Error()
+				} else {
+					//发送消息
+					message = SendMessagePrometheusAlert(msg, &pMsg, logsign)
+				}
 			}
 		} else {
 			//获取渲染后的模版

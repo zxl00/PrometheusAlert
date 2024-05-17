@@ -19,6 +19,7 @@ func LogsSign() string {
 
 // 转换时间戳到时间字符串
 func GetTime(timeStr interface{}, timeFormat ...string) string {
+
 	var R_Time string
 	//判断传入的timeStr是否为float64类型，如gerrit消息中时间戳就是float64
 	switch timeStr.(type) {
@@ -36,7 +37,20 @@ func GetTime(timeStr interface{}, timeFormat ...string) string {
 		if len(timeFormat) == 0 {
 			timeFormat = append(timeFormat, "2006-01-02T15:04:05")
 		}
-		R_Time = time.Unix(int64(timeStr.(float64)), 0).Format(timeFormat[0])
+		tn := len(strconv.FormatFloat(timeStr.(float64), 'f', -1, 64))
+		switch tn {
+		case 10:
+			R_Time = time.Unix(int64(timeStr.(float64)), 0).Format(timeFormat[0])
+		case 13:
+			R_Time = time.Unix(int64(timeStr.(float64)/1000), 0).Format(timeFormat[0])
+		case 16:
+			R_Time = time.Unix(int64(timeStr.(float64)/1000000), 0).Format(timeFormat[0])
+		case 19:
+			R_Time = time.Unix(int64(timeStr.(float64)/1000000000), 0).Format(timeFormat[0])
+		default:
+			R_Time = time.Unix(int64(timeStr.(float64)), 0).Format(timeFormat[0])
+		}
+
 	}
 	return R_Time
 }

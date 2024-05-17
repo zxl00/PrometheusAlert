@@ -233,18 +233,25 @@ feiyu563/prometheus-alert:latest
 
  - [【GitHub】: PrometheusAlert](https://github.com/feiyu563/PrometheusAlert)
  - [【码云】: PrometheusAlert](https://gitee.com/feiyu563/PrometheusAlert)
-
---------------------------------------
-
-加入PrometheusAlert微信交流群
-
---------------------------------------
-
-
-![me](doc/images/wx.png)
-
----
-
-Email: 244217140@qq.com
+ 
 
 ----
+#### 内容补充
+添加grafana告警历史追踪面板
+![it](doc/images/grafana-1.png)
+![it](doc/images/grafana-2.png)
+
+添加告警持续时间
+![it](doc/images/alert-subtime.png)s
+
+添加skywalking告警模板
+![it](doc/images/skywalking.png)
+
+#### 文档补充
+以上内容具体实现，可以参考公众号文章，更多内容可以看一下公众号。
+> https://mp.weixin.qq.com/s/YYR3bDU1KhvlUYmdrjrVEw
+
+> https://mp.weixin.qq.com/s/9yWQJlQdHTsB0C5qbtLFzQ
+
+
+
